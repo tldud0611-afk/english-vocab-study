@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개발자를 위한 필수 영단어 — 설치 & 터미널 편</title>
+<style>
+  :root{
+    --bg:#f7f8fb;
+    --surface:#ffffff;
+    --border:#e3e6ee;
+    --text:#1c2130;
+    --muted:#6b7280;
+    --accent:#4f5fe0;
+    --accent-soft:#eef0ff;
+    --good:#1f9d55;
+    --good-soft:#e7f8ee;
+    --bad:#d64545;
+    --bad-soft:#fdecec;
+    --radius:16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    padding:24px 16px 60px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  header{
+    text-align:center;
+    margin-bottom:24px;
+  }
+  header h1{
+    font-size:1.6rem;
+    margin:0 0 6px;
+  }
+  header p{
+    color:var(--muted);
+    margin:0;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  nav.tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin:20px 0 24px;
+  }
+  nav.tabs button{
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:0.88rem;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  nav.tabs button:hover{border-color:var(--accent);}
+  nav.tabs button.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+    font-weight:600;
+  }
+  section.panel{display:none;}
+  section.panel.active{display:block;}
+  .section-title{
+    font-size:1.05rem;
+    font-weight:700;
+    margin:4px 0 4px;
+  }
+  .section-desc{
+    color:var(--muted);
+    font-size:0.85rem;
+    margin:0 0 16px;
+  }
+  .hint{
+    font-size:0.8rem;
+    color:var(--muted);
+    text-align:center;
+    margin-bottom:14px;
+  }
+
+  /* Flashcards */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+    gap:14px;
+  }
+  .card{
+    perspective:1000px;
+    height:130px;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    text-align:center;
+    transition:transform .5s;
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .card-face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:var(--radius);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:12px;
+    border:1px solid var(--border);
+  }
+  .card-front{
+    background:var(--surface);
+  }
+  .card-front .en{
+    font-weight:700;
+    font-size:1.05rem;
+    line-height:1.3;
+  }
+  .card-front .tap{
+    margin-top:8px;
+    font-size:0.72rem;
+    color:var(--muted);
+  }
+  .card-back{
+    background:var(--accent-soft);
+    transform:rotateY(180deg);
+    border-color:var(--accent);
+  }
+  .card-back .pron{
+    font-size:0.75rem;
+    color:var(--accent);
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  .card-back .ko{
+    font-size:0.95rem;
+    font-weight:600;
+    line-height:1.35;
+  }
+
+  /* Sentence list */
+  .sentence-list{display:flex;flex-direction:column;gap:10px;}
+  .sentence{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    cursor:pointer;
+  }
+  .sentence .en{
+    font-weight:700;
+    font-size:0.98rem;
+  }
+  .sentence .ko{
+    margin-top:8px;
+    font-size:0.88rem;
+    color:var(--accent);
+    font-weight:600;
+    display:none;
+  }
+  .sentence.open .ko{display:block;}
+  .sentence .toggle-hint{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+  }
+
+  /* Quiz */
+  .quiz-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    text-align:center;
+  }
+  .quiz-progress{
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  .quiz-question{
+    font-size:1.3rem;
+    font-weight:700;
+    margin:8px 0 24px;
+    word-break:keep-all;
+  }
+  .quiz-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  @media (max-width:520px){
+    .quiz-options{grid-template-columns:1fr;}
+  }
+  .quiz-options button{
+    padding:14px 10px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    font-size:0.92rem;
+    cursor:pointer;
+    text-align:left;
+  }
+  .quiz-options button:hover{border-color:var(--accent);}
+  .quiz-options button.correct{
+    background:var(--good-soft);
+    border-color:var(--good);
+    color:var(--good);
+    font-weight:700;
+  }
+  .quiz-options button.wrong{
+    background:var(--bad-soft);
+    border-color:var(--bad);
+    color:var(--bad);
+    font-weight:700;
+  }
+  .quiz-options button:disabled{cursor:default;}
+  .start-btn, .next-btn, .retry-btn{
+    margin-top:20px;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:999px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .quiz-result{
+    font-size:1.4rem;
+    font-weight:700;
+    margin:10px 0;
+  }
+  .quiz-result-sub{
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.78rem;
+    margin-top:36px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>💻 개발자를 위한 필수 영단어</h1>
+    <p>프로그램 설치할 때, VS Code 터미널 쓸 때 자주 보이는 영어 단어와 문장 모음이에요.<br>
+    카드를 눌러서 뜻을 확인하고, 마지막엔 퀴즈로 복습해보세요.</p>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="install" class="active">설치 · 다운로드 단어</button>
+    <button data-tab="consent">동의 · 확인 문장</button>
+    <button data-tab="terminal">터미널 단어</button>
+    <button data-tab="terminalMsg">터미널 메시지</button>
+    <button data-tab="quiz">퀴즈 🎯</button>
+  </nav>
+
+  <section class="panel active" id="panel-install">
+    <div class="section-title">설치 · 다운로드할 때 보이는 단어</div>
+    <p class="section-desc">프로그램을 설치하거나 다운로드할 때 뜨는 버튼, 창 제목에 자주 나오는 단어예요.</p>
+    <p class="hint">카드를 클릭하면 뜻이 나와요 👆</p>
+    <div class="grid" id="grid-install"></div>
+  </section>
+
+  <section class="panel" id="panel-consent">
+    <div class="section-title">동의 · 확인 관련 문장</div>
+    <p class="section-desc">설치/보안 창에서 자주 보이는 전체 문장이에요. 뜻을 몰라서 캡처해서 보내던 문장들이 여기 있을 거예요.</p>
+    <p class="hint">문장을 클릭하면 뜻이 나와요 👆</p>
+    <div class="sentence-list" id="list-consent"></div>
+  </section>
+
+  <section class="panel" id="panel-terminal">
+    <div class="section-title">VS Code 터미널에서 자주 보이는 단어</div>
+    <p class="section-desc">코드를 실행하거나 명령어를 입력할 때 터미널 창에 자주 뜨는 단어예요.</p>
+    <p class="hint">카드를 클릭하면 뜻이 나와요 👆</p>
+    <div class="grid" id="grid-terminal"></div>
+  </section>
+
+  <section class="panel" id="panel-terminalMsg">
+    <div class="section-title">터미널에 뜨는 메시지 문장</div>
+    <p class="section-desc">npm install 같은 명령어를 실행했을 때 터미널에 뜨는 대표적인 메시지들이에요.</p>
+    <p class="hint">문장을 클릭하면 뜻이 나와요 👆</p>
+    <div class="sentence-list" id="list-terminalMsg"></div>
+  </section>
+
+  <section class="panel" id="panel-quiz">
+    <div class="section-title">퀴즈로 복습하기</div>
+    <p class="section-desc">지금까지 본 단어 중에서 무작위로 10문제를 풀어요. 영어 단어를 보고 알맞은 뜻을 골라보세요.</p>
+    <div class="quiz-box" id="quizBox"></div>
+  </section>
+
+  <footer>총 {{TOTAL}}개의 단어·문장 · 개인 학습용으로 자유롭게 활용하세요</footer>
+</div>
+
+<script>
+// ---------- Data ----------
+const installWords = [
+  {en:"Install", pron:"인스톨", ko:"설치하다"},
+  {en:"Download", pron:"다운로드", ko:"다운로드하다, 내려받다"},
+  {en:"Setup", pron:"셋업", ko:"설치 프로그램 / 설정"},
+  {en:"Next", pron:"넥스트", ko:"다음"},
+  {en:"Back", pron:"백", ko:"이전"},
+  {en:"Finish", pron:"피니시", ko:"완료"},
+  {en:"Cancel", pron:"캔슬", ko:"취소"},
+  {en:"Agree", pron:"어그리", ko:"동의하다"},
+  {en:"Accept", pron:"억셉트", ko:"수락하다"},
+  {en:"Decline", pron:"디클라인", ko:"거절하다"},
+  {en:"License Agreement", pron:"라이선스 어그리먼트", ko:"사용권 계약서"},
+  {en:"Terms and Conditions", pron:"텀즈 앤 컨디션즈", ko:"이용 약관"},
+  {en:"Destination Folder", pron:"데스티네이션 폴더", ko:"설치될 폴더 (목적지 폴더)"},
+  {en:"Allow", pron:"얼라우", ko:"허용하다"},
+  {en:"Don't Allow / Deny", pron:"돈트 얼라우 / 디나이", ko:"허용하지 않다 / 거부하다"},
+  {en:"Permission", pron:"퍼미션", ko:"권한"},
+  {en:"Administrator", pron:"어드미니스트레이터", ko:"관리자"},
+  {en:"Restart required", pron:"리스타트 리콰이어드", ko:"재시작이 필요함"},
+];
+
+const consentSentences = [
+  {en:"I agree to the Terms of Service and Privacy Policy.", ko:"서비스 이용약관과 개인정보 처리방침에 동의합니다."},
+  {en:"I have read and agree to the license terms.", ko:"라이선스 조건을 읽었으며 동의합니다."},
+  {en:"By clicking Continue, you agree to our terms.", ko:"'계속'을 클릭하면 약관에 동의하는 것입니다."},
+  {en:"Do you want to allow this app to make changes to your device?", ko:"이 앱이 내 장치를 변경하도록 허용하시겠습니까? (관리자 권한 요청 창)"},
+  {en:"Windows protected your PC", ko:"Windows가 PC를 보호했습니다 (보안 경고 창 제목)"},
+  {en:"Run anyway", ko:"그래도 실행하기 (보안 경고를 무시하고 실행)"},
+  {en:"This app can't run on your PC", ko:"이 앱은 PC에서 실행할 수 없습니다"},
+  {en:"Would you like to save your changes?", ko:"변경 사항을 저장하시겠습니까?"},
+  {en:"Are you sure you want to delete this file?", ko:"이 파일을 정말 삭제하시겠습니까?"},
+  {en:"An error occurred during installation.", ko:"설치 중 오류가 발생했습니다."},
+  {en:"Please restart your computer to complete the installation.", ko:"설치를 완료하려면 컴퓨터를 재시작해 주세요."},
+  {en:"Setup was successful.", ko:"설치가 성공적으로 완료되었습니다."},
+];
+
+const terminalWords = [
+  {en:"Terminal", pron:"터미널", ko:"터미널 (명령어 입력 창)"},
+  {en:"Command", pron:"커맨드", ko:"명령어"},
+  {en:"Command line", pron:"커맨드 라인", ko:"명령줄"},
+  {en:"Directory", pron:"디렉토리", ko:"폴더 / 디렉터리"},
+  {en:"Path", pron:"패스", ko:"경로"},
+  {en:"Run", pron:"런", ko:"실행하다"},
+  {en:"Execute", pron:"엑서큐트", ko:"실행하다"},
+  {en:"Build", pron:"빌드", ko:"빌드하다 (프로그램을 만들다)"},
+  {en:"Debug", pron:"디버그", ko:"디버그하다 (오류 찾아 고치다)"},
+  {en:"Error", pron:"에러", ko:"오류"},
+  {en:"Warning", pron:"워닝", ko:"경고"},
+  {en:"Failed", pron:"페일드", ko:"실패한"},
+  {en:"Permission denied", pron:"퍼미션 디나이드", ko:"권한이 거부됨"},
+  {en:"Command not found", pron:"커맨드 낫 파운드", ko:"명령어를 찾을 수 없음"},
+  {en:"File not found", pron:"파일 낫 파운드", ko:"파일을 찾을 수 없음"},
+  {en:"Dependencies", pron:"디펜던시즈", ko:"의존성 (필요한 패키지들)"},
+  {en:"Package", pron:"패키지", ko:"패키지"},
+  {en:"Branch", pron:"브랜치", ko:"(깃) 브랜치, 작업 갈래"},
+  {en:"Conflict", pron:"컨플릭트", ko:"충돌"},
+  {en:"Update", pron:"업데이트", ko:"업데이트하다"},
+];
+
+const terminalMsgSentences = [
+  {en:"npm install", ko:"필요한 패키지를 설치하는 명령어예요."},
+  {en:"Do you want to continue? [Y/n]", ko:"계속하시겠습니까? [Y/n] (Y=예, n=아니오)"},
+  {en:"Overwrite? (y/n)", ko:"덮어쓰시겠습니까? (y/n)"},
+  {en:"Are you sure? (y/N)", ko:"정말 확인하시겠습니까? (y/N, 대문자가 기본값)"},
+  {en:"Press any key to continue", ko:"계속하려면 아무 키나 누르세요"},
+  {en:"Process finished with exit code 0", ko:"프로세스가 종료 코드 0으로 끝났습니다 (0은 성공을 의미)"},
+  {en:"Fetching packages...", ko:"패키지를 가져오는 중입니다..."},
+  {en:"up to date", ko:"이미 최신 상태입니다"},
+  {en:"found 0 vulnerabilities", ko:"발견된 취약점이 0개입니다 (안전하다는 뜻)"},
+  {en:"Ctrl+C to stop", ko:"중지하려면 Ctrl+C를 누르세요"},
+];
+
+// ---------- Render flashcards ----------
+function renderCards(containerId, data){
+  const el = document.getElementById(containerId);
+  el.innerHTML = data.map((item, i) => `
+    <div class="card" data-idx="${i}">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="en">${item.en}</div>
+          <div class="tap">눌러서 뜻 보기</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="pron">[${item.pron}]</div>
+          <div class="ko">${item.ko}</div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+  el.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => card.classList.toggle("flipped"));
+  });
+}
+
+function renderSentences(containerId, data){
+  const el = document.getElementById(containerId);
+  el.innerHTML = data.map((item, i) => `
+    <div class="sentence" data-idx="${i}">
+      <div class="en">"${item.en}"</div>
+      <div class="ko">${item.ko}</div>
+      <div class="toggle-hint">눌러서 뜻 보기</div>
+    </div>
+  `).join("");
+  el.querySelectorAll(".sentence").forEach(s => {
+    s.addEventListener("click", () => s.classList.toggle("open"));
+  });
+}
+
+renderCards("grid-install", installWords);
+renderCards("grid-terminal", terminalWords);
+renderSentences("list-consent", consentSentences);
+renderSentences("list-terminalMsg", terminalMsgSentences);
+
+document.querySelector("footer").textContent =
+  `총 ${installWords.length + terminalWords.length + consentSentences.length + terminalMsgSentences.length}개의 단어·문장 · 개인 학습용으로 자유롭게 활용하세요`;
+
+// ---------- Tabs ----------
+const tabButtons = document.querySelectorAll("nav.tabs button");
+const panels = document.querySelectorAll("section.panel");
+tabButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    tabButtons.forEach(b => b.classList.remove("active"));
+    panels.forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    if (btn.dataset.tab === "quiz" && !quizStarted) {
+      renderQuizStart();
+    }
+  });
+});
+
+// ---------- Quiz ----------
+const allTerms = [
+  ...installWords.map(w => ({q: w.en, a: w.ko})),
+  ...terminalWords.map(w => ({q: w.en, a: w.ko})),
+  ...consentSentences.map(w => ({q: w.en, a: w.ko})),
+  ...terminalMsgSentences.map(w => ({q: w.en, a: w.ko})),
+];
+
+let quizStarted = false;
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuiz(){
+  const pool = shuffle(allTerms);
+  const count = Math.min(10, pool.length);
+  quizQuestions = pool.slice(0, count).map(item => {
+    const wrongPool = shuffle(allTerms.filter(t => t.a !== item.a)).slice(0, 3);
+    const options = shuffle([item, ...wrongPool]);
+    return { q: item.q, correct: item.a, options: options.map(o => o.a) };
+  });
+  quizIndex = 0;
+  quizScore = 0;
+}
+
+const quizBox = document.getElementById("quizBox");
+
+function renderQuizStart(){
+  quizStarted = false;
+  quizBox.innerHTML = `
+    <p style="color:var(--muted);margin-top:0;">준비되면 아래 버튼을 눌러 시작하세요.</p>
+    <button class="start-btn" id="startQuizBtn">퀴즈 시작하기</button>
+  `;
+  document.getElementById("startQuizBtn").addEventListener("click", () => {
+    quizStarted = true;
+    buildQuiz();
+    renderQuizQuestion();
+  });
+}
+
+function renderQuizQuestion(){
+  const item = quizQuestions[quizIndex];
+  quizBox.innerHTML = `
+    <div class="quiz-progress">${quizIndex + 1} / ${quizQuestions.length}문제 · 맞은 개수: ${quizScore}</div>
+    <div class="quiz-question">${item.q}</div>
+    <div class="quiz-options">
+      ${item.options.map((opt, i) => `<button data-opt="${i}">${opt}</button>`).join("")}
+    </div>
+  `;
+  const buttons = quizBox.querySelectorAll(".quiz-options button");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.disabled = true);
+      const chosen = btn.textContent;
+      if (chosen === item.correct) {
+        btn.classList.add("correct");
+        quizScore++;
+      } else {
+        btn.classList.add("wrong");
+        buttons.forEach(b => { if (b.textContent === item.correct) b.classList.add("correct"); });
+      }
+      const isLast = quizIndex === quizQuestions.length - 1;
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "next-btn";
+      nextBtn.textContent = isLast ? "결과 보기" : "다음 문제";
+      nextBtn.addEventListener("click", () => {
+        if (isLast) {
+          renderQuizResult();
+        } else {
+          quizIndex++;
+          renderQuizQuestion();
+        }
+      });
+      quizBox.appendChild(nextBtn);
+    });
+  });
+}
+
+function renderQuizResult(){
+  const total = quizQuestions.length;
+  let msg = "";
+  if (quizScore === total) msg = "완벽해요! 🎉";
+  else if (quizScore >= total * 0.7) msg = "잘하고 있어요 👍";
+  else if (quizScore >= total * 0.4) msg = "조금만 더 연습해봐요 💪";
+  else msg = "카드 탭에서 다시 복습해봐요 📚";
+
+  quizBox.innerHTML = `
+    <div class="quiz-result">${quizScore} / ${total} 정답</div>
+    <div class="quiz-result-sub">${msg}</div>
+    <button class="retry-btn" id="retryBtn">다시 풀기</button>
+  `;
+  document.getElementById("retryBtn").addEventListener("click", () => {
+    buildQuiz();
+    renderQuizQuestion();
+  });
+}
+</script>
+</body>
+</html>

@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>개발자를 위한 필수 영단어 — 설치 & 터미널 편</title>
+<script>
+  (function(){
+    const saved = localStorage.getItem("theme");
+    const theme = saved === "dark" || saved === "light" ? saved : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
 <style>
   :root{
     --bg:#f7f8fb;
@@ -20,6 +27,39 @@
     --radius:16px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Helvetica, Arial, sans-serif;
   }
+  :root[data-theme="dark"]{
+    --bg:#14161f;
+    --surface:#1d2030;
+    --border:#2e3247;
+    --text:#e6e8f0;
+    --muted:#9096ab;
+    --accent:#7c8cff;
+    --accent-soft:#262c4d;
+    --good:#3ec876;
+    --good-soft:#173726;
+    --bad:#ef6363;
+    --bad-soft:#3a2020;
+  }
+  body{transition:background .2s ease, color .2s ease;}
+  .theme-toggle{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:10;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    font-size:1.1rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .15s ease;
+  }
+  .theme-toggle:hover{border-color:var(--accent);}
   *{box-sizing:border-box;}
   body{
     margin:0;
@@ -253,6 +293,7 @@
 </style>
 </head>
 <body>
+<button class="theme-toggle" id="themeToggle" aria-label="다크모드 전환" title="다크모드 전환"></button>
 <div class="wrap">
   <header>
     <h1>💻 개발자를 위한 필수 영단어</h1>
@@ -306,6 +347,21 @@
 </div>
 
 <script>
+// ---------- Theme toggle ----------
+const themeToggle = document.getElementById("themeToggle");
+function applyThemeIcon(){
+  const theme = document.documentElement.getAttribute("data-theme");
+  themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+}
+applyThemeIcon();
+themeToggle.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+  applyThemeIcon();
+});
+
 // ---------- Data ----------
 const installWords = [
   {en:"Install", pron:"인스톨", ko:"설치하다"},

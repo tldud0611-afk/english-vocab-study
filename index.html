@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>개발자를 위한 필수 영단어 — 설치 & 터미널 편</title>
+<meta name="description" content="프로그램 설치 화면과 VS Code 터미널에서 자주 보이는 영어 단어·문장을 카드와 퀴즈로 학습하는 개발자용 영단어 사이트입니다.">
 <meta name="google-adsense-account" content="ca-pub-9882497863331509">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9882497863331509" crossorigin="anonymous"></script>
 <script>
@@ -381,7 +382,9 @@
     <button data-tab="terminal">터미널 단어</button>
     <button data-tab="terminalMsg">터미널 메시지</button>
     <button data-tab="quiz">퀴즈 🎯</button>
+    <button data-tab="about">사이트 소개</button>
     <button data-tab="contact">제휴 문의 ✉️</button>
+    <button data-tab="privacy">개인정보처리방침</button>
   </nav>
 
   <section class="panel active" id="panel-install">
@@ -418,6 +421,16 @@
     <div class="quiz-box" id="quizBox"></div>
   </section>
 
+  <section class="panel" id="panel-about">
+    <div class="section-title">사이트 소개</div>
+    <p class="section-desc">이 사이트가 어떤 목적으로 만들어졌는지 소개해드려요.</p>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;font-size:0.92rem;line-height:1.7;color:var(--text);">
+      <p><strong>개발자를 위한 필수 영단어</strong>는 프로그램을 설치하거나 VS Code 터미널을 사용할 때 자주 마주치지만 뜻을 몰라 헤매기 쉬운 영어 단어와 문장을 모아 정리한 학습용 웹사이트예요.</p>
+      <p>코딩을 처음 배우는 분, 컴퓨터를 자주 다루지만 영어에 익숙하지 않은 분들이 설치 화면, 보안 경고, 터미널 메시지에 나오는 영어를 빠르게 이해할 수 있도록 돕는 것을 목표로 합니다.</p>
+      <p>단어 카드, 문장 목록, 퀴즈 세 가지 방식으로 학습할 수 있으며, 계속해서 콘텐츠를 추가하고 다듬어 나갈 예정이에요. 사이트 이용 중 궁금한 점이나 제안하고 싶은 내용이 있다면 <strong>제휴 문의</strong> 탭의 양식을 통해 언제든 알려주세요.</p>
+    </div>
+  </section>
+
   <section class="panel" id="panel-contact">
     <div class="section-title">제휴 문의</div>
     <p class="section-desc">제휴나 협업 관련 문의는 아래 양식을 채워서 보내주세요.</p>
@@ -437,6 +450,22 @@
       <button type="submit" class="contact-submit-btn" id="contactSubmitBtn">보내기</button>
       <p class="contact-status" id="contactStatus"></p>
     </form>
+  </section>
+
+  <section class="panel" id="panel-privacy">
+    <div class="section-title">개인정보처리방침</div>
+    <p class="section-desc">이 사이트를 이용하시는 분들의 개인정보 처리 방침을 안내해드려요.</p>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;font-size:0.9rem;line-height:1.7;color:var(--text);">
+      <p><strong>1. 수집하는 개인정보</strong><br>
+      이 사이트는 단어·문장 학습 콘텐츠를 제공하는 정적 웹페이지로, 회원가입이나 로그인 없이 이용할 수 있으며 별도로 개인정보를 수집하지 않습니다. 다만 <strong>제휴 문의</strong> 양식을 통해 문의를 남기실 경우, 입력하신 이름·이메일·문의 내용이 양식 처리 서비스인 Formspree(formspree.io)로 전송되어 문의 응대 목적으로만 사용됩니다.</p>
+      <p><strong>2. 쿠키 및 광고 서비스</strong><br>
+      이 사이트는 제3자 광고 서비스인 Google 애드센스(Google AdSense)를 사용합니다. Google을 비롯한 광고 파트너는 쿠키를 이용해 이용자가 이 사이트 및 다른 사이트를 방문한 이력을 바탕으로 맞춤 광고를 게재할 수 있습니다. Google의 광고 쿠키 사용에 대한 자세한 내용과 맞춤 광고 수신 거부(opt-out) 방법은 <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google 광고 정책 페이지</a>에서 확인하실 수 있습니다.</p>
+      <p><strong>3. 댓글 서비스</strong><br>
+      댓글 기능은 외부 서비스인 Disqus를 통해 제공되며, 댓글 작성 시 Disqus의 자체 개인정보처리방침 및 쿠키 정책이 적용됩니다.</p>
+      <p><strong>4. 문의</strong><br>
+      개인정보 처리와 관련해 궁금한 점이 있으시면 <strong>제휴 문의</strong> 탭의 양식을 통해 연락해주세요.</p>
+      <p style="color:var(--muted);font-size:0.82rem;">최종 수정일: 2026-07-21</p>
+    </div>
   </section>
 
   <section class="comments-section">

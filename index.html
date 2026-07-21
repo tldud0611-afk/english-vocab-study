@@ -284,6 +284,73 @@
     color:var(--muted);
     font-size:0.9rem;
   }
+
+  /* Contact form */
+  .contact-form{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    max-width:480px;
+    margin:0 auto;
+  }
+  .contact-form label{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    font-size:0.88rem;
+    font-weight:600;
+  }
+  .contact-form input,
+  .contact-form textarea{
+    font-family:inherit;
+    font-size:0.92rem;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    color:var(--text);
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  .contact-form textarea{
+    resize:vertical;
+    min-height:110px;
+  }
+  .contact-submit-btn{
+    margin-top:4px;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:999px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .contact-submit-btn:disabled{
+    opacity:0.6;
+    cursor:default;
+  }
+  .contact-status{
+    font-size:0.85rem;
+    text-align:center;
+    display:none;
+  }
+  .contact-status.success{
+    display:block;
+    color:var(--good);
+  }
+  .contact-status.error{
+    display:block;
+    color:var(--bad);
+  }
   footer{
     text-align:center;
     color:var(--muted);
@@ -307,6 +374,7 @@
     <button data-tab="terminal">터미널 단어</button>
     <button data-tab="terminalMsg">터미널 메시지</button>
     <button data-tab="quiz">퀴즈 🎯</button>
+    <button data-tab="contact">제휴 문의 ✉️</button>
   </nav>
 
   <section class="panel active" id="panel-install">
@@ -341,6 +409,27 @@
     <div class="section-title">퀴즈로 복습하기</div>
     <p class="section-desc">지금까지 본 단어 중에서 무작위로 10문제를 풀어요. 영어 단어를 보고 알맞은 뜻을 골라보세요.</p>
     <div class="quiz-box" id="quizBox"></div>
+  </section>
+
+  <section class="panel" id="panel-contact">
+    <div class="section-title">제휴 문의</div>
+    <p class="section-desc">제휴나 협업 관련 문의는 아래 양식을 채워서 보내주세요.</p>
+    <form class="contact-form" id="contactForm">
+      <label>
+        이름
+        <input type="text" name="name" required placeholder="홍길동">
+      </label>
+      <label>
+        이메일
+        <input type="email" name="email" required placeholder="you@example.com">
+      </label>
+      <label>
+        문의 내용
+        <textarea name="message" required placeholder="문의하실 내용을 입력해주세요."></textarea>
+      </label>
+      <button type="submit" class="contact-submit-btn" id="contactSubmitBtn">보내기</button>
+      <p class="contact-status" id="contactStatus"></p>
+    </form>
   </section>
 
   <footer>총 {{TOTAL}}개의 단어·문장 · 개인 학습용으로 자유롭게 활용하세요</footer>
@@ -599,6 +688,39 @@ function renderQuizResult(){
     renderQuizQuestion();
   });
 }
+
+// ---------- Contact form ----------
+const contactForm = document.getElementById("contactForm");
+const contactSubmitBtn = document.getElementById("contactSubmitBtn");
+const contactStatus = document.getElementById("contactStatus");
+
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  contactSubmitBtn.disabled = true;
+  contactStatus.className = "contact-status";
+  contactStatus.textContent = "";
+
+  try {
+    const res = await fetch("https://formspree.io/f/mjgnokep", {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body: new FormData(contactForm),
+    });
+    if (res.ok) {
+      contactStatus.textContent = "문의가 정상적으로 전송되었어요. 감사합니다! 🙌";
+      contactStatus.className = "contact-status success";
+      contactForm.reset();
+    } else {
+      contactStatus.textContent = "전송에 실패했어요. 잠시 후 다시 시도해주세요.";
+      contactStatus.className = "contact-status error";
+    }
+  } catch (err) {
+    contactStatus.textContent = "전송 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.";
+    contactStatus.className = "contact-status error";
+  } finally {
+    contactSubmitBtn.disabled = false;
+  }
+});
 </script>
 </body>
 </html>
